@@ -26,10 +26,25 @@ mongoose.connection.on("connected", () => {
 });
 
 // MiddleWare
+app.use(express.json());
+
 app.use("/api/auth", authRoute);
 app.use("/api/users", usersRoute);
 app.use("/api/hotels", hotelsRoute);
 app.use("/api/rooms", roomsRoute);
+
+app.use((err, req, res, next) => {
+  const errStatus = err.status || 500;
+  const errMassage = err.massage || "Something went wrong!";
+  return res
+    .status(errStatus)
+    .json({
+      success: false,
+      status: errStatus,
+      massage: errMassage,
+      stack: err.stack,
+    });
+});
 
 app.listen(8080, () => {
   connection();
