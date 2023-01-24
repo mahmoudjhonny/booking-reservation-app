@@ -5,6 +5,7 @@ import authRoute from "./routes/auth.js";
 import usersRoute from "./routes/users.js";
 import hotelsRoute from "./routes/hotels.js";
 import roomsRoute from "./routes/rooms.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 dotenv.config();
@@ -26,6 +27,7 @@ mongoose.connection.on("connected", () => {
 });
 
 // MiddleWare
+app.use(cookieParser());
 app.use(express.json());
 
 app.use("/api/auth", authRoute);
@@ -36,14 +38,12 @@ app.use("/api/rooms", roomsRoute);
 app.use((err, req, res, next) => {
   const errStatus = err.status || 500;
   const errMassage = err.massage || "Something went wrong!";
-  return res
-    .status(errStatus)
-    .json({
-      success: false,
-      status: errStatus,
-      massage: errMassage,
-      stack: err.stack,
-    });
+  return res.status(errStatus).json({
+    success: false,
+    status: errStatus,
+    massage: errMassage,
+    stack: err.stack,
+  });
 });
 
 app.listen(8080, () => {
