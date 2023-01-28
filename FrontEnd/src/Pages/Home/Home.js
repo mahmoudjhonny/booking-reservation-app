@@ -2,7 +2,7 @@ import Navbar from "../../Components/Navbar/Navbar";
 import Header from "../../Components/Header/Header";
 import "./Home.css";
 import Features from "../../Components/Features/Features";
-import PropertyList from "../../Components/Property/propertyList";
+import PropertyList from "../../Components/Property/PropertyList";
 import FeaturesProperties from "../../Components/FeaturesProperties/FeaturesProperties";
 import MailList from "../../Components/MailList/MailList";
 import Footer from "../../Components/Footer/Footer";
