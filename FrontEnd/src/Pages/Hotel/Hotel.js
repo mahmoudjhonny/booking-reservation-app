@@ -8,7 +8,6 @@ import useFetch from "../../Api_Call/useFetch";
 import { useLocation } from "react-router-dom";
 import { useContext } from "react";
 import { SearchContaxt } from "../../contaxt/SearchContext";
-import { OptionUnstyled } from "@mui/base";
 
 const Hotel = () => {
   const location = useLocation();
