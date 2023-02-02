@@ -5,7 +5,6 @@ const FeaturesProperties = () => {
   const { data, loading } = useFetch(
     "http://localhost:8080/api/hotels?featured=true&limit=3"
   );
-  console.log(data);
   return (
     <div className="fp">
       {loading ? (

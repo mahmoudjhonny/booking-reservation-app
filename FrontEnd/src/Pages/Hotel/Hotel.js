@@ -6,6 +6,9 @@ import Footer from "../../Components/Footer/Footer";
 import { LocationOn } from "@mui/icons-material";
 import useFetch from "../../Api_Call/useFetch";
 import { useLocation } from "react-router-dom";
+import { useContext } from "react";
+import { SearchContaxt } from "../../contaxt/SearchContext";
+import { OptionUnstyled } from "@mui/base";
 
 const Hotel = () => {
   const location = useLocation();
@@ -13,7 +16,14 @@ const Hotel = () => {
   const { loading, data } = useFetch(
     `http://localhost:8080/api/hotels/find/${id}`
   );
-  console.log(data);
+  const { dates, options } = useContext(SearchContaxt);
+  const MILLISECONDS_IN_DAYS = 1000 * 60 * 60 * 24;
+  const dayDifference = (date_1, date_2) => {
+    const dateDiff = Math.abs(date_2.getTime() - date_1.getTime());
+    const diffDays = Math.ceil(dateDiff / MILLISECONDS_IN_DAYS);
+    return diffDays;
+  };
+  const days = dayDifference(dates[0].endDate, dates[0].startDate);
   return (
     <div>
       <Navbar />
@@ -49,10 +59,11 @@ const Hotel = () => {
                 <p className="hotelDesc">{data.desc}</p>
               </div>
               <div className="hotelDetailsPrice">
-                <h1>Perfect for a 9-nights stay!</h1>
+                <h1>Perfect for a {days}-nights stay!</h1>
                 <span>{data.desc}</span>
                 <h2>
-                  <b>${data.cheapstPrice}</b> (9 nights)
+                  <b>${data.cheapstPrice * days * options.room}</b> ({days}{" "}
+                  nights)
                 </h2>
                 <button>Reserve or Book now!</button>
               </div>
