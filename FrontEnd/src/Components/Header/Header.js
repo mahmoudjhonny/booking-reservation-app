@@ -14,6 +14,7 @@ import {
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { SearchContaxt } from "../../contaxt/SearchContext";
+import { AuthContaxt } from "../../contaxt/AuthContext";
 
 function Header({ type }) {
   const [destination, setDistination] = useState("");
@@ -44,6 +45,7 @@ function Header({ type }) {
   };
 
   const { dispatch } = useContext(SearchContaxt);
+  const { user } = useContext(AuthContaxt);
 
   const handleSearch = () => {
     dispatch({ type: "NEW_SEARCH", payload: { destination, dates, options } });
@@ -86,7 +88,7 @@ function Header({ type }) {
               Lorem Ipsum is simply dummy text of the printing and typesetting
               industry.
             </p>
-            <button className="headerBtn">Sign in / Register</button>
+            {!user && <button className="headerBtn">Sign in / Register</button>}
             <div className="headerSearch">
               <div className="headerSearchItem">
                 <Hotel className="headerIcon" />
