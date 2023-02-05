@@ -5,17 +5,22 @@ import MailList from "../../Components/MailList/MailList";
 import Footer from "../../Components/Footer/Footer";
 import { LocationOn } from "@mui/icons-material";
 import useFetch from "../../Api_Call/useFetch";
-import { useLocation } from "react-router-dom";
-import { useContext } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
 import { SearchContaxt } from "../../contaxt/SearchContext";
+import { AuthContaxt } from "../../contaxt/AuthContext";
+import Reserve from "../../Components/Reserve/Reserve";
 
 const Hotel = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const id = location.pathname.split("/")[2];
   const { loading, data } = useFetch(
     `http://localhost:8080/api/hotels/find/${id}`
   );
   const { dates, options } = useContext(SearchContaxt);
+  const { user } = useContext(AuthContaxt);
+  const [openModal, setOpenModal] = useState(false);
   const MILLISECONDS_IN_DAYS = 1000 * 60 * 60 * 24;
   const dayDifference = (date_1, date_2) => {
     const dateDiff = Math.abs(date_2.getTime() - date_1.getTime());
@@ -23,6 +28,13 @@ const Hotel = () => {
     return diffDays;
   };
   const days = dayDifference(dates[0].endDate, dates[0].startDate);
+  const handleClick = () => {
+    if (user) {
+      setOpenModal(true);
+    } else {
+      navigate("/login");
+    }
+  };
   return (
     <div>
       <Navbar />
@@ -64,7 +76,7 @@ const Hotel = () => {
                   <b>${data.cheapstPrice * days * options.room}</b> ({days}{" "}
                   nights)
                 </h2>
-                <button>Reserve or Book now!</button>
+                <button onClick={handleClick}>Reserve or Book now!</button>
               </div>
             </div>
           </div>
@@ -72,6 +84,7 @@ const Hotel = () => {
           <Footer />
         </div>
       )}
+      {openModal && <Reserve setOpenModal={setOpenModal} hotelId={id} />}
     </div>
   );
 };
